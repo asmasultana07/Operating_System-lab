@@ -1,0 +1,37 @@
+re_string = list(map(int, input("Reference string: ").split())) 
+frame = int(input("Total frame: "))
+
+memory = [" "] * frame  # Frame sequence
+
+page_fault = 0
+total_hit = 0
+
+print("Formating--")
+while re_string:
+    if " " in memory:
+        x = re_string.pop(0)
+        if x in memory:
+            total_hit += 1
+        else:
+            page_fault += 1
+            empty_frame_index = memory.index(" ")
+            memory[empty_frame_index] = x
+        print(memory)
+    else:
+        x = re_string.pop(0)
+        if x in memory:
+            total_hit += 1
+        else:
+            page_fault += 1
+            future_indices = []
+            for frame in memory:
+                try:
+                    future_indices.append(re_string.index(frame))
+                except ValueError:
+                    future_indices.append(len(re_string))
+            farthest_index = future_indices.index(max(future_indices))
+            memory[farthest_index] = x
+        print(memory)
+
+print(f"\nPage Miss: {page_fault}")
+print(f"Page Hit : {total_hit}")
